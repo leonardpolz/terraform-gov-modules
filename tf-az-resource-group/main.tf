@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "../../tf-az-config-validation-example"
+  source = "git::https://github.com/leonardpolz/terraform-governance-framework-interceptor-module-example?ref=v1.0.0"
   configurations = [for rg in var.resource_groups : {
     tf_id                = rg.tf_id
     resource_type        = "Microsoft.Resources/resourceGroups"
@@ -18,16 +18,6 @@ resource "azurerm_resource_group" "resource_groups" {
   location   = each.value.location
   managed_by = each.value.managed_by
   tags       = each.value.tags
-
-  dynamic "timeouts" {
-    for_each = each.value.timeouts != null ? [each.value.timeouts] : []
-    content {
-      create = timeouts.value.create
-      read   = timeouts.value.read
-      update = timeouts.value.update
-      delete = timeouts.value.delete
-    }
-  }
 }
 
 module "role_assignments" {
