@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "git::https://github.com/leonardpolz/terraform-governance-framework-interceptor-module-example?ref=v1.0.0"
+  source = "../tf-governance-interceptor-facade"
   configurations = [for rg in var.resource_groups : {
     tf_id                = rg.tf_id
     resource_type        = "Microsoft.Resources/resourceGroups"
