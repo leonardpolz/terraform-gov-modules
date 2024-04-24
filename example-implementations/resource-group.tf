@@ -1,10 +1,11 @@
 module "resource_group" {
-  source = "git::https://github.com/leonardpolz/terraform-governance-framework-core-modules.git//tf-az-resource-group?ref=v1.0.0"
+  //source = "git::https://github.com/leonardpolz/terraform-governance-framework-core-modules.git//tf-az-resource-group?ref=v1.0.0"
+  source = "../tf-az-resource-group"
   resource_groups = [{
     tf_id = "example"
     name_config = {
       values = {
-        workload_name = "examplestorageaccount"
+        workload_name = "exampleresourcegroup"
         environment   = "tst"
       }
     }
@@ -23,6 +24,11 @@ module "resource_group" {
     tags = {
       terraform_repository_uri = "https://github.com/leonardpolz/terraform-governance-framework-core-modules.git"
       deployed_by              = "Leonard Polz"
+      hidden-title             = "Test Resource Group"
     }
   }]
+}
+
+output "resource_group_config" {
+  value = module.resource_group.resource_group_config_map
 }

@@ -22,4 +22,3 @@ resource "azurerm_role_assignment" "role_assignments" {
   description                            = each.value.description
   skip_service_principal_aad_check       = each.value.skip_service_principal_aad_check
 }
-

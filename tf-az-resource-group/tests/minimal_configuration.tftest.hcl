@@ -14,9 +14,11 @@ variables {
 
     nc_bypass = "test-rg"
     location  = "westeurope"
+    
     tags = {
       terraform_repository_uri = "test.git"
       deployed_by              = "test"
+      hidden-title             = "Test Resource Group"
     }
   }]
 }

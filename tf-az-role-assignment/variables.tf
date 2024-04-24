@@ -1,5 +1,5 @@
 variable "role_assignments" {
-  type = list(object({
+  type = set(object({
     tf_id                                  = string
     parent_name                            = optional(string)
     scope                                  = string

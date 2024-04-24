@@ -21,6 +21,7 @@ variables {
       tags = {
         terraform_repository_uri = "test.git"
         deployed_by              = "test"
+        hidden-title             = "Test Resource Group"
       }
 
       role_assignments = [
@@ -53,6 +54,7 @@ variables {
       tags = {
         terraform_repository_uri = "test.git"
         deployed_by              = "test"
+        hidden-title             = "Test Resource Group"
       }
 
       role_assignments = [
