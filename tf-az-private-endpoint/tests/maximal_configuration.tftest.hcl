@@ -27,13 +27,11 @@ run "plan" {
 
         role_assignments = [
           {
-            tf_id              = "test_ra_1"
             principal_id       = "00000000-0000-0000-0000-000000000000"
             role_definition_id = "00000000-0000-0000-0000-000000000001"
           },
           {
-            tf_id              = "test_ra_2"
-            principal_id       = "00000000-0000-0000-0000-000000000001"
+            principal_id       = "00000000-0000-0000-0000-000000000000"
             role_definition_id = "00000000-0000-0000-0000-000000000002"
           }
         ]
@@ -42,30 +40,30 @@ run "plan" {
         location            = "germanywestcentral"
         subnet_id           = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-mock-group/providers/Microsoft.Network/virtualNetworks/vnet-mock-network/subnets/snet-mock-subnet"
 
-        custom_network_interface_name = "test-nic"
+        custom_network_interface_nc_bypass = "test-nic"
         private_dns_zone_group = {
-          name = "test-dns-zone-group"
+          nc_bypass = "test-dns-zone-group"
           private_dns_zone_ids = [
             "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/myResourceGroup/providers/Microsoft.Network/privateDnsZones/myprivatedns.zone"
           ]
         }
 
         private_service_connection = {
-          name                           = "test-service-connection"
+          nc_bypass                      = "test-service-connection"
           private_connection_resource_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-mock-group/providers/Microsoft.Network/virtualNetworks/vnet-mock-network/subnets/snet-mock-subnet"
           subresource_names              = ["test"]
           request_message                = "test"
         }
 
         ip_configuration = {
-          name               = "test-ip-config"
+          nc_bypass          = "test-ip-config"
           private_ip_address = "0.0.0.0"
           subresource_name   = "test"
           member_name        = "test"
         }
       },
       {
-        tf_id = "test_pep"
+        tf_id = "test_pep_2"
 
         name_config = {
           values = {
@@ -84,12 +82,10 @@ run "plan" {
 
         role_assignments = [
           {
-            tf_id              = "test_ra_1"
-            principal_id       = "00000000-0000-0000-0000-000000000000"
+            principal_id       = "00000000-0000-0000-0000-000000000001"
             role_definition_id = "00000000-0000-0000-0000-000000000001"
           },
           {
-            tf_id              = "test_ra_2"
             principal_id       = "00000000-0000-0000-0000-000000000001"
             role_definition_id = "00000000-0000-0000-0000-000000000002"
           }
@@ -99,7 +95,7 @@ run "plan" {
         location            = "germanywestcentral"
         subnet_id           = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-mock-group/providers/Microsoft.Network/virtualNetworks/vnet-mock-network/subnets/snet-mock-subnet"
 
-        custom_network_interface_name = "test-nic"
+        custom_network_interface_nc_bypass = "test-nic"
         private_dns_zone_group = {
           name = "test-dns-zone-group"
           private_dns_zone_ids = [
