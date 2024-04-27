@@ -91,6 +91,38 @@ run "plan" {
                 route_table_id = "/subscriptions/abcd1234-5678-90ab-cdef-1234567890ab/resourceGroups/ExampleResourceGroup/providers/Microsoft.Network/routeTables/ExampleRouteTable"
               }
             ]
+
+            network_security_group_settings = {
+              name_config = {
+                values = {}
+              }
+
+              nc_bypass = "test-nsg"
+
+              security_rules = [
+                {
+                  tf_id = "test_nsg_rule"
+
+                  name_config = {
+                    values = {
+                      workload_name = "test-nsg-rule"
+                    }
+                  }
+
+                  nc_bypass = "test-nsg-rule"
+
+                  description                = "Allow inbound traffic on port 80"
+                  protocol                   = "Tcp"
+                  source_port_range          = "33"
+                  source_address_prefix      = "1.1.1.1"
+                  destination_port_range     = "80"
+                  destination_address_prefix = "2.2.2.2"
+                  access                     = "Allow"
+                  priority                   = 100
+                  direction                  = "Inbound"
+                }
+              ]
+            }
           }
         ]
 
@@ -299,11 +331,6 @@ run "plan" {
   assert {
     condition     = azurerm_subnet.subnets["test_vnet_default"].delegation[0].service_delegation[0].actions[0] == "Microsoft.Network/networkinterfaces/*"
     error_message = "Virtual network subnet delegations[0].service_delegation[0].actions[0] '${azurerm_subnet.subnets["test_vnet_default"].delegation[0].service_delegation[0].actions[0]}' does not match expected value 'Microsoft.Network/networkinterfaces/*'"
-  }
-
-  assert {
-    condition     = azurerm_subnet_network_security_group_association.network_security_group_associations["test_vnet_default_test"].network_security_group_id == "/subscriptions/abcd1234-ef56-gh78-ij90-klmn1234opqr/resourceGroups/ExampleResourceGroup/providers/Microsoft.Network/networkSecurityGroups/ExampleNSG"
-    error_message = "Virtual network subnet network_security_group_associations[0].network_security_group_id '${azurerm_subnet_network_security_group_association.network_security_group_associations["test_vnet_default_test"].network_security_group_id}' does not match expected value '/subscriptions/abcd1234-ef56-gh78-ij90-klmn1234opqr/resourceGroups/ExampleResourceGroup/providers/Microsoft.Network/networkSecurityGroups/ExampleNSG'"
   }
 
   assert {

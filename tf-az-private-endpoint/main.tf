@@ -55,13 +55,13 @@ resource "azurerm_private_endpoint" "private_endpoints" {
 module "role_assignments" {
   source = "../tf-az-role-assignment"
   role_assignments = flatten([
-    for key, pip in local.private_endpoint_map : [
-      for ra in pip.role_assignments : merge(ra, {
+    for key, pep in local.private_endpoint_map : [
+      for ra in pep.role_assignments : merge(ra, {
         tf_id       = ra.tf_id != null ? ra.tf_id : "${key}_${ra.principal_id}_${ra.role_definition_name != null ? replace(ra.role_definition_name, " ", "_") : ra.role_definition_id}"
-        parent_name = pip.name
+        parent_name = pep.name
         scope       = azurerm_private_endpoint.private_endpoints[key].id
       })
-    ] if pip.role_assignments != null
+    ] if pep.role_assignments != null
   ])
 }
 

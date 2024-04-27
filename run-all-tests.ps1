@@ -8,7 +8,8 @@ foreach ($dir in $directories) {
     terraform init
     if ($?) {
         terraform test
-    } else {
+    }
+    else {
         Write-Host "Terraform init failed in $($dir.Name)"
         Pop-Location
     }

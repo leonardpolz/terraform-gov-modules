@@ -1,0 +1,59 @@
+module "network_security_group" {
+  //source = "git::https://github.com/leonardpolz/terraform-governance-framework-core-modules.git//tf-az-network-security-group?ref=v1.0.0"
+  source = "../tf-az-network-security-group"
+  network_security_groups = [{
+
+    tf_id = "example"
+    name_config = {
+      values = {
+        workload_name = "example-network-security-group"
+        environment   = "tst"
+      }
+    }
+
+    role_assignments = [
+      {
+        principal_id         = "00000000-0000-0000-0000-000000000000"
+        role_definition_name = "Contributor"
+      },
+      {
+        principal_id         = "11111111-1111-1111-1111-111111111111"
+        role_definition_name = "Reader"
+      }
+    ]
+
+    tags = {
+      terraform_repository_uri = "https://github.com/leonardpolz/terraform-governance-framework-core-modules.git"
+      deployed_by              = "Leonard Polz"
+      hidden-title             = "Test Network Security Group"
+    }
+
+    resource_group_name = "my-rg"
+    location            = "westeurope"
+
+    security_rules      = [
+      {
+        tf_id = "example_security_rule"
+
+        name_config = {
+          values = {
+            workload_name = "example-security-rule"
+          }
+        }
+        description = "Allow inbound traffic from the internet"
+        protocol    = "Tcp"
+        source_port_range = "*"
+        source_address_prefix = "*"
+        destination_port_range = "80"
+        destination_address_prefix = "*"
+        access      = "Allow"
+        priority    = 100
+        direction   = "Inbound"
+      }
+    ]
+  }]
+}
+
+output "network_security_group_config" {
+  value = module.network_security_group.network_security_group_config_map
+}

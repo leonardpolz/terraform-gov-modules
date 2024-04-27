@@ -60,6 +60,39 @@ module "virtual_network" {
             actions = ["Microsoft.Network/virtualNetworks/subnets/action"]
           }
         }]
+
+        network_security_group_settings = {
+
+          name_config = {
+            values = {}
+          }
+
+          nc_bypass = "test-nsg"
+
+          security_rules = [
+            {
+              tf_id = "test_nsg_rule"
+
+              name_config = {
+                values = {
+                  workload_name = "test-nsg-rule"
+                }
+              }
+
+              nc_bypass = "test-nsg-rule"
+
+              description                = "Allow inbound traffic on port 80"
+              protocol                   = "Tcp"
+              source_port_range          = "33"
+              source_address_prefix      = "1.1.1.1"
+              destination_port_range     = "80"
+              destination_address_prefix = "2.2.2.2"
+              access                     = "Allow"
+              priority                   = 100
+              direction                  = "Inbound"
+            }
+          ]
+        }
       }]
 
       virtual_network_peerings = [{

@@ -86,23 +86,25 @@ resource "azurerm_subnet" "subnets" {
   }
 }
 
-locals {
-  network_security_group_association_list = flatten([
-    for key, snet in local.subnet_map : [
-      for nsga in snet.network_security_group_associations != null ? snet.network_security_group_associations : [] : merge(
-        nsga, {
-          tf_id      = "${key}_${nsga.tf_id}"
-          snet_tf_id = key
-        }
-      )
-    ]
-  ])
+module "network_security_groups" {
+  source = "../tf-az-network-security-group"
+  network_security_groups = [
+    for key, snet in local.subnet_map : merge(
+      snet.network_security_group_settings,
+      {
+        tf_id               = key
+        parent_name         = azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].name
+        resource_group_name = try(snet.network_security_group_settings.resource_group_name, null) != null ? snet.network_security_group_settings.resource_group_name : azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].resource_group_name
+        location            = try(snet.network_security_group_settings.location, null) != null ? snet.network_security_group_settings.location : azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].location
+      }
+    )
+  ]
 }
 
 resource "azurerm_subnet_network_security_group_association" "network_security_group_associations" {
-  for_each                  = { for nsga in local.network_security_group_association_list : nsga.tf_id => nsga }
-  network_security_group_id = each.value.network_security_group_id
-  subnet_id                 = azurerm_subnet.subnets[each.value.snet_tf_id].id
+  for_each                  = local.subnet_map
+  subnet_id                 = azurerm_subnet.subnets[each.key].id
+  network_security_group_id = module.network_security_groups.network_security_groups[each.key].id
 }
 
 locals {

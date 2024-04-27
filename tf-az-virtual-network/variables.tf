@@ -55,10 +55,59 @@ variable "virtual_networks" {
         })
       })))
 
-      network_security_group_associations = optional(list(object({
-        tf_id                     = string
-        network_security_group_id = string
-      })))
+      network_security_group_settings = optional(object({
+        name_config = object({
+          values = map(string)
+        })
+
+        nc_bypass = optional(string)
+
+        resource_group_name = optional(string)
+        location            = optional(string)
+
+        security_rules = optional(list(object({
+          tf_id = string
+
+          name_config = object({
+            values = map(string)
+          })
+
+          nc_bypass = optional(string)
+
+          description                                = string
+          protocol                                   = string
+          source_port_range                          = optional(string)
+          source_port_ranges                         = optional(list(string))
+          source_address_prefix                      = optional(string)
+          source_address_prefixes                    = optional(list(string))
+          source_application_security_group_ids      = optional(list(string))
+          destination_port_range                     = optional(string)
+          destination_port_ranges                    = optional(list(string))
+          destination_address_prefix                 = optional(string)
+          destination_address_prefixes               = optional(list(string))
+          destination_application_security_group_ids = optional(list(string))
+          access                                     = string
+          priority                                   = string
+          direction                                  = string
+        })))
+
+        role_assignments = optional(set(object({
+          tf_id                                  = optional(string)
+          principal_id                           = string
+          name                                   = optional(string)
+          role_definition_id                     = optional(string)
+          role_definition_name                   = optional(string)
+          condition                              = optional(string)
+          condition_version                      = optional(string)
+          delegated_managed_identity_resource_id = optional(string)
+          description                            = optional(string)
+          skip_service_principal_aad_check       = optional(bool)
+        })))
+        }), {
+        name_config = {
+          values = {}
+        }
+      })
 
       route_table_associations = optional(list(object({
         tf_id          = string

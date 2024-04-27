@@ -36,7 +36,7 @@ module "private_endpoint" {
   }]
 }
 
-output "private_endpoint_config" {
-  value = module.private_endpoint.private_endpoint_config_map
-}
+# output "private_endpoint_config" {
+#   value = module.private_endpoint.private_endpoint_config_map
+# }
 

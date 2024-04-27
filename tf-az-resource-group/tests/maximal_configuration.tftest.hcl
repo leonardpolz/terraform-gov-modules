@@ -26,12 +26,10 @@ variables {
 
       role_assignments = [
         {
-          tf_id              = "test_ra_1"
           principal_id       = "00000000-0000-0000-0000-000000000000"
           role_definition_id = "00000000-0000-0000-0000-000000000001"
         },
         {
-          tf_id              = "test_ra_2"
           principal_id       = "00000000-0000-0000-0000-000000000001"
           role_definition_id = "00000000-0000-0000-0000-000000000002"
         }
