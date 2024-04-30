@@ -1,0 +1,16 @@
+module "private_dns_zone" {
+  //source = "git::https://github.com/leonardpolz/terraform-governance-framework-core-modules.git//tf-az-private-dns-zone?ref=v1.0.0"
+  source = "../tf-az-private-dns-zone"
+  private_dns_zones = [{
+    tf_id = "test_pdz"
+
+    tags = {
+      terraform_repository_uri = "https://github.com/leonardpolz/terraform-governance-framework-core-modules.git"
+      deployed_by              = "Leonard Polz"
+      hidden-title             = "Test Private DNS Zone"
+    }
+
+    name                = "test.local"
+    resource_group_name = "test-rg"
+  }]
+}

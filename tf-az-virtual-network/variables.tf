@@ -103,11 +103,7 @@ variable "virtual_networks" {
           description                            = optional(string)
           skip_service_principal_aad_check       = optional(bool)
         })))
-        }), {
-        name_config = {
-          values = {}
-        }
-      })
+      }))
 
       route_table_associations = optional(list(object({
         tf_id          = string

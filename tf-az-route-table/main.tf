@@ -9,7 +9,14 @@ module "configuration_interceptor" {
 }
 
 locals {
-  route_table_map = module.configuration_interceptor.configuration_map
+  route_table_map = {
+    for rt in var.route_tables : rt.tf_id => merge(
+      rt, {
+        name     = module.configuration_interceptor.configuration_map[rt.tf_id].name
+        tags     = module.configuration_interceptor.configuration_map[rt.tf_id].tags
+        location = module.configuration_interceptor.configuration_map[rt.tf_id].location
+    })
+  }
 }
 
 resource "azurerm_route_table" "route_tables" {

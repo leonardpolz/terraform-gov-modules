@@ -8,8 +8,17 @@ module "configuration_interceptor" {
   ]
 }
 
+locals {
+  configuration_map = {
+    for ra in var.role_assignments : ra.tf_id => merge(
+      ra, {
+      }
+    )
+  }
+}
+
 resource "azurerm_role_assignment" "role_assignments" {
-  for_each = module.configuration_interceptor.configuration_map
+  for_each = local.configuration_map
 
   name                                   = each.value.name
   scope                                  = each.value.scope

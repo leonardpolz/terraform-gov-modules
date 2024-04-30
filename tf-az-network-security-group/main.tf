@@ -9,7 +9,14 @@ module "configuration_interceptor" {
 }
 
 locals {
-  network_security_group_map = module.configuration_interceptor.configuration_map
+  network_security_group_map = {
+    for nsg in var.network_security_groups : nsg.tf_id => merge(
+      nsg, {
+        name     = module.configuration_interceptor.configuration_map[nsg.tf_id].name
+        tags     = module.configuration_interceptor.configuration_map[nsg.tf_id].tags
+        location = module.configuration_interceptor.configuration_map[nsg.tf_id].location
+    })
+  }
 }
 
 resource "azurerm_network_security_group" "network_security_groups" {

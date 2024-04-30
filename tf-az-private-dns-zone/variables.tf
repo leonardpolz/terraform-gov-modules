@@ -1,32 +1,11 @@
-variable "route_tables" {
+variable "private_dns_zones" {
   type = set(object({
     tf_id       = string
     parent_name = optional(string)
 
-    name_config = object({
-      values = map(string)
-    })
-
-    nc_bypass = optional(string)
-
-    resource_group_name           = string
-    location                      = optional(string)
-    disable_bgp_route_propagation = optional(bool)
-    tags                          = optional(map(string))
-
-    routes = optional(set(object({
-      tf_id = string
-
-      name_config = object({
-        values = map(string)
-      })
-
-      nc_bypass = optional(string)
-
-      address_prefix         = string
-      next_hop_type          = string
-      next_hop_in_ip_address = optional(string)
-    })))
+    name                = string
+    resource_group_name = string
+    tags                = optional(map(string))
 
     role_assignments = optional(set(object({
       tf_id                                  = optional(string)
@@ -40,7 +19,23 @@ variable "route_tables" {
       description                            = optional(string)
       skip_service_principal_aad_check       = optional(bool)
     })))
-  }))
 
-  default = []
+    soa_record = optional(object({
+      email        = string
+      expire_time  = optional(number)
+      minimum_ttl  = optional(number)
+      refresh_time = optional(number)
+      retry_time   = optional(number)
+      ttl          = optional(number)
+      tags         = optional(map(string))
+    }))
+
+    a_records = optional(set(object({
+      tf_id   = string
+      name    = string
+      ttl     = number
+      records = set(string)
+      tags    = optional(map(string))
+    })))
+  }))
 }

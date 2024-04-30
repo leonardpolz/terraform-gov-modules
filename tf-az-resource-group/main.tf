@@ -9,7 +9,14 @@ module "configuration_interceptor" {
 }
 
 locals {
-  resource_group_map = module.configuration_interceptor.configuration_map
+  resource_group_map = {
+    for rg in var.resource_groups : rg.tf_id => merge(
+      rg, {
+        name     = module.configuration_interceptor.configuration_map[rg.tf_id].name
+        tags     = module.configuration_interceptor.configuration_map[rg.tf_id].tags
+        location = module.configuration_interceptor.configuration_map[rg.tf_id].location
+    })
+  }
 }
 
 resource "azurerm_resource_group" "resource_groups" {
@@ -22,6 +29,7 @@ resource "azurerm_resource_group" "resource_groups" {
 
 module "role_assignments" {
   source = "../tf-az-role-assignment"
+
   role_assignments = flatten([
     for key, rg in local.resource_group_map : [
       for ra in rg.role_assignments : merge(ra, {

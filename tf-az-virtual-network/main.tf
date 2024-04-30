@@ -9,7 +9,27 @@ module "configuration_interceptor" {
 }
 
 locals {
-  virtual_network_map = module.configuration_interceptor.configuration_map
+  virtual_network_map = {
+    for vnet in var.virtual_networks : vnet.tf_id => merge(
+      vnet, {
+        name     = module.configuration_interceptor.configuration_map[vnet.tf_id].name
+        tags     = module.configuration_interceptor.configuration_map[vnet.tf_id].tags
+        location = module.configuration_interceptor.configuration_map[vnet.tf_id].location
+
+        subnets = [
+          for snet in vnet.subnets != null ? vnet.subnets : [] : merge(
+            snet, {
+              name = module.configuration_interceptor.configuration_map[vnet.tf_id].subnets[snet.tf_id].name
+              network_security_group_settings = merge(
+                snet.network_security_group_settings, {
+                  tags = module.configuration_interceptor.configuration_map[vnet.tf_id].subnets[snet.tf_id].network_security_group_settings.tags
+                }
+              )
+          })
+        ]
+      }
+    )
+  }
 }
 
 resource "azurerm_virtual_network" "virtual_networks" {
@@ -92,8 +112,12 @@ module "network_security_groups" {
     for key, snet in local.subnet_map : merge(
       snet.network_security_group_settings,
       {
-        tf_id               = key
-        parent_name         = azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].name
+        tf_id       = key
+        parent_name = azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].name
+        name_config = try(snet.network_security_group_settings.name_config, null) != null ? snet.network_security_group_settings.name_config : {
+          values = {}
+        }
+
         resource_group_name = try(snet.network_security_group_settings.resource_group_name, null) != null ? snet.network_security_group_settings.resource_group_name : azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].resource_group_name
         location            = try(snet.network_security_group_settings.location, null) != null ? snet.network_security_group_settings.location : azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].location
       }
