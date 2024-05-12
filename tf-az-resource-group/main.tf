@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "../tf-governance-interceptor-facade"
+  source = "../tf-governance-interceptor"
   configurations = [for rg in var.resource_groups : {
     tf_id                = rg.tf_id
     resource_type        = "Microsoft.Resources/resourceGroups"

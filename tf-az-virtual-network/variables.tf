@@ -1,12 +1,11 @@
 variable "virtual_networks" {
   type = set(object({
-    tf_id       = string
-    parent_name = optional(string)
+    tf_id = string
 
     name_config = object({
-      values = map(string)
+      name_segments = map(string)
+      parent_name   = optional(string)
     })
-
     nc_bypass = optional(string)
 
     resource_group_name     = string
@@ -32,7 +31,8 @@ variable "virtual_networks" {
       tf_id = string
 
       name_config = object({
-        values = map(string)
+        name_segments = map(string)
+        parent_name   = optional(string)
       })
 
       nc_bypass                                     = optional(string)
@@ -42,9 +42,10 @@ variable "virtual_networks" {
       service_endpoints                             = optional(set(string))
       service_endpoint_policy_ids                   = optional(set(string))
 
-      delegations = optional(set(object({
+      delegations = optional(list(object({
         name_config = object({
-          values = map(string)
+          name_segments = map(string)
+          parent_name   = optional(string)
         })
 
         nc_bypass = optional(string)
@@ -57,7 +58,7 @@ variable "virtual_networks" {
 
       network_security_group_settings = optional(object({
         name_config = object({
-          values = map(string)
+          name_segments = map(string)
         })
 
         nc_bypass = optional(string)
@@ -69,7 +70,7 @@ variable "virtual_networks" {
           tf_id = string
 
           name_config = object({
-            values = map(string)
+            name_segments = map(string)
           })
 
           nc_bypass = optional(string)
@@ -115,7 +116,8 @@ variable "virtual_networks" {
       tf_id = string
 
       name_config = object({
-        values = map(string)
+        name_segments = map(string)
+        parent_name   = optional(string)
       })
 
       nc_bypass                    = optional(string)

@@ -6,7 +6,7 @@ variables {
   resource_groups = [{
     tf_id = "test_rg"
     name_config = {
-      values = {
+      name_segments = {
         workload_name = "test"
         environment   = "dev"
       }

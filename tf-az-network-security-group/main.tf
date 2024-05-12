@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "../tf-governance-interceptor-facade"
+  source = "../tf-governance-interceptor"
   configurations = [for nsg in var.network_security_groups : {
     tf_id                = nsg.tf_id
     resource_type        = "Microsoft.Network/networkSecurityGroups"
@@ -15,6 +15,13 @@ locals {
         name     = module.configuration_interceptor.configuration_map[nsg.tf_id].name
         tags     = module.configuration_interceptor.configuration_map[nsg.tf_id].tags
         location = module.configuration_interceptor.configuration_map[nsg.tf_id].location
+
+        security_rules = nsg.security_rules != null ? [
+          for sr in nsg.security_rules : merge(
+            sr, {
+              name = sr.nc_bypass != null ? sr.nc_bypass : module.configuration_interceptor.configuration_map[nsg.tf_id].security_rules[sr.tf_id].name
+          })
+        ] : []
     })
   }
 }

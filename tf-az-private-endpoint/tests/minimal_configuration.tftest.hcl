@@ -10,7 +10,7 @@ run "plan" {
       tf_id = "test_pep"
 
       name_config = {
-        values = {
+         name_segments = {
           workload_name = "testendpoint"
           environment   = "test"
         }

@@ -5,9 +5,10 @@ module "network_security_group" {
 
     tf_id = "example"
     name_config = {
-      values = {
-        workload_name = "example-network-security-group"
-        environment   = "tst"
+      name_segments = {
+        landing_zone  = "lz1"
+        environment   = "dev"
+        workload_name = "example"
       }
     }
 
@@ -31,24 +32,23 @@ module "network_security_group" {
     resource_group_name = "my-rg"
     location            = "westeurope"
 
-    security_rules      = [
+    security_rules = [
       {
         tf_id = "example_security_rule"
 
         name_config = {
-          values = {
-            workload_name = "example-security-rule"
-          }
+          name_segments = {}
+          parent_name   = "on-prem-vm-1"
         }
-        description = "Allow inbound traffic from the internet"
-        protocol    = "Tcp"
-        source_port_range = "*"
-        source_address_prefix = "*"
-        destination_port_range = "80"
+        description                = "Allow inbound traffic from the internet"
+        protocol                   = "Tcp"
+        source_port_range          = "*"
+        source_address_prefix      = "*"
+        destination_port_range     = "80"
         destination_address_prefix = "*"
-        access      = "Allow"
-        priority    = 100
-        direction   = "Inbound"
+        access                     = "Allow"
+        priority                   = 100
+        direction                  = "Inbound"
       }
     ]
   }]

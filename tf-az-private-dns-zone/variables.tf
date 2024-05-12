@@ -1,7 +1,6 @@
 variable "private_dns_zones" {
   type = set(object({
-    tf_id       = string
-    parent_name = optional(string)
+    tf_id = string
 
     name                = string
     resource_group_name = string

@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "../tf-governance-interceptor-facade"
+  source = "../tf-governance-interceptor"
   configurations = [for pdz in var.private_dns_zones : {
     tf_id         = pdz.tf_id
     resource_type = "Microsoft.Network/privateDnsZones"

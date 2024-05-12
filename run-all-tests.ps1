@@ -5,7 +5,7 @@ foreach ($dir in $directories) {
     Write-Host "=============================="
     Write-Host "Module: $($dir.Name)"
     Write-Host "=============================="
-    terraform init
+    #terraform init
     if ($?) {
         terraform test
     }

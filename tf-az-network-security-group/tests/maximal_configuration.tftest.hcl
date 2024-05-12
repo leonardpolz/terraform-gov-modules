@@ -12,7 +12,7 @@ run "plan" {
         parent_name = "example-parent"
 
         name_config = {
-          values = {
+          name_segments = {
             workload_name = "test-nsg"
             environment   = "test"
           }
@@ -45,7 +45,7 @@ run "plan" {
             tf_id = "test_nsg_rule"
 
             name_config = {
-              values = {
+              name_segments = {
                 workload_name = "test-nsg-rule"
               }
             }
@@ -69,7 +69,7 @@ run "plan" {
         parent_name = "example-parent"
 
         name_config = {
-          values = {
+          name_segments = {
             workload_name = "test-nsg"
             environment   = "test"
           }
@@ -102,7 +102,7 @@ run "plan" {
             tf_id = "test_nsg_rule"
 
             name_config = {
-              values = {
+              name_segments = {
                 workload_name = "test-nsg-rule"
               }
             }

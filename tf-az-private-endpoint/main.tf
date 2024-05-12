@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "../tf-governance-interceptor-facade"
+  source = "../tf-governance-interceptor"
   configurations = [for pep in var.private_endpoints : {
     tf_id                = pep.tf_id
     resource_type        = "Microsoft.Network/privateEndpoints"

@@ -4,7 +4,8 @@ module "private_endpoint" {
   private_endpoints = [{
     tf_id = "example"
     name_config = {
-      values = {
+      name_segments = {
+        landing_zone  = "test"
         workload_name = "exampleprivateendpoint"
         environment   = "tst"
       }

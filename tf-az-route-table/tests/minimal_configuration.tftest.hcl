@@ -7,7 +7,7 @@ variables {
     tf_id = "test_route_table"
 
     name_config = {
-      values = {
+      name_segments = {
         workload_name = "example"
         environment   = "tst"
       }

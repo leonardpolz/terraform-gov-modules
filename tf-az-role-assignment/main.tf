@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "../tf-governance-interceptor-facade"
+  source = "../tf-governance-interceptor"
   configurations = [for ra in var.role_assignments : {
     tf_id                = ra.tf_id
     resource_type        = "Microsoft.Authorization/roleAssignments"

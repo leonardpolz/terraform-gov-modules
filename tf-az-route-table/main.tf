@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "../tf-governance-interceptor-facade"
+  source = "../tf-governance-interceptor"
   configurations = [for rt in var.route_tables : {
     tf_id                = rt.tf_id
     resource_type        = "Microsoft.Network/routeTables"
@@ -15,13 +15,20 @@ locals {
         name     = module.configuration_interceptor.configuration_map[rt.tf_id].name
         tags     = module.configuration_interceptor.configuration_map[rt.tf_id].tags
         location = module.configuration_interceptor.configuration_map[rt.tf_id].location
+
+        routes = rt.routes != null ? [
+          for r in rt.routes : merge(
+            r, {
+              name = module.configuration_interceptor.configuration_map[rt.tf_id].routes[r.tf_id].name
+          })
+        ] : []
     })
   }
 }
 
 resource "azurerm_route_table" "route_tables" {
   for_each                      = local.route_table_map
-  name                          = each.value.nc_bypass != null ? each.value.nc_bypass : each.value.name
+  name                          = each.value.name
   resource_group_name           = each.value.resource_group_name
   location                      = each.value.location
   disable_bgp_route_propagation = each.value.disable_bgp_route_propagation
@@ -43,7 +50,7 @@ locals {
 
 resource "azurerm_route" "routes" {
   for_each               = { for r in local.route_list : r.tf_id => r }
-  name                   = each.value.nc_bypass != null ? each.value.nc_bypass : each.value.name
+  name                   = each.value.name
   resource_group_name    = azurerm_route_table.route_tables[each.value.rt_tf_id].resource_group_name
   route_table_name       = azurerm_route_table.route_tables[each.value.rt_tf_id].name
   address_prefix         = each.value.address_prefix

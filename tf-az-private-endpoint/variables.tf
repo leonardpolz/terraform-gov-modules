@@ -1,10 +1,10 @@
 variable "private_endpoints" {
   type = set(object({
-    tf_id       = string
-    parent_name = optional(string)
+    tf_id = string
 
     name_config = object({
-      values = map(string)
+      parent_name   = optional(string)
+      name_segments = map(string)
     })
 
     nc_bypass = optional(string)

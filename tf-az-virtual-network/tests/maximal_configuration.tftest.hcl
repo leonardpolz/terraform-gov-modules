@@ -11,7 +11,7 @@ run "plan" {
         tf_id = "test_vnet"
 
         name_config = {
-          values = {
+          name_segments = {
             environment   = "tst"
             workload_name = "test-vnet"
           }
@@ -48,7 +48,7 @@ run "plan" {
             tf_id = "default"
 
             name_config = {
-              values = {
+              name_segments = {
                 workload_name = "test"
               }
             }
@@ -64,7 +64,7 @@ run "plan" {
             delegations = [
               {
                 name_config = {
-                  values = {
+                  name_segments = {
                     workload_name = "test"
                   }
                 }
@@ -94,7 +94,7 @@ run "plan" {
 
             network_security_group_settings = {
               name_config = {
-                values = {}
+                name_segments = {}
               }
 
               nc_bypass = "test-nsg"
@@ -104,7 +104,7 @@ run "plan" {
                   tf_id = "test_nsg_rule"
 
                   name_config = {
-                    values = {
+                    name_segments = {
                       workload_name = "test-nsg-rule"
                     }
                   }
@@ -141,7 +141,7 @@ run "plan" {
         tf_id = "test_vnet_2"
 
         name_config = {
-          values = {
+          name_segments = {
             environment   = "tst"
             workload_name = "test-vnet"
           }
@@ -178,9 +178,7 @@ run "plan" {
             tf_id = "default"
 
             name_config = {
-              values = {
-                workload_name = "test"
-              }
+              name_segments = {}
             }
 
             nc_bypass = "test-snet"
@@ -194,7 +192,7 @@ run "plan" {
             delegations = [
               {
                 name_config = {
-                  values = {
+                  name_segments = {
                     workload_name = "test"
                   }
                 }

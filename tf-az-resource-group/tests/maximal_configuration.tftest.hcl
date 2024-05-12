@@ -7,7 +7,7 @@ variables {
     {
       tf_id = "test_rg"
       name_config = {
-        values = {
+        name_segments = {
           workload_name = "test"
           environment   = "dev"
         }
@@ -38,7 +38,7 @@ variables {
     {
       tf_id = "test_rg_2"
       name_config = {
-        values = {
+        name_segments = {
           workload_name = "test"
           environment   = "dev"
         }

@@ -10,7 +10,7 @@ run "plan" {
       tf_id = "test_nsg"
 
       name_config = {
-        values = {
+        name_segments = {
           workload_name = "test-nsg"
           environment   = "test"
         }

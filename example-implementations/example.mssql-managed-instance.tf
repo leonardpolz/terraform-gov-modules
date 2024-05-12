@@ -1,5 +1,3 @@
-
-
 module "mssql_managed_instance" {
   //source = "git::https://github.com/leonardpolz/terraform-governance-framework-core-modules.git//tf-az-mssql-managed-instance?ref=v1.0.0"
   source = "../tf-az-mssql-managed-instance"
@@ -7,7 +5,8 @@ module "mssql_managed_instance" {
 
     tf_id = "example"
     name_config = {
-      values = {
+      name_segments = {
+        landing_zone  = "lz1"
         workload_name = "example-managed-instance"
         environment   = "tst"
       }

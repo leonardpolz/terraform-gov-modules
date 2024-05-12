@@ -1,10 +1,10 @@
 variable "mssql_managed_instances" {
   type = set(object({
-    tf_id       = string
-    parent_name = optional(string)
+    tf_id = string
 
     name_config = object({
-      values = map(string)
+      parent_name   = optional(string)
+      name_segments = map(string)
     })
 
     nc_bypass = optional(string)
@@ -26,6 +26,19 @@ variable "mssql_managed_instances" {
     storage_account_type           = optional(string)
     timezone_id                    = optional(string)
     tags                           = optional(map(string))
+
+    role_assignments = optional(set(object({
+      tf_id                                  = optional(string)
+      principal_id                           = string
+      name                                   = optional(string)
+      role_definition_id                     = optional(string)
+      role_definition_name                   = optional(string)
+      condition                              = optional(string)
+      condition_version                      = optional(string)
+      delegated_managed_identity_resource_id = optional(string)
+      description                            = optional(string)
+      skip_service_principal_aad_check       = optional(bool)
+    })))
 
     connectivity_settings = optional(object({
       subnet_id_bypass = optional(string)

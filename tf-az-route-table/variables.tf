@@ -1,10 +1,10 @@
 variable "route_tables" {
   type = set(object({
-    tf_id       = string
-    parent_name = optional(string)
+    tf_id = string
 
     name_config = object({
-      values = map(string)
+      parent_name   = optional(string)
+      name_segments = map(string)
     })
 
     nc_bypass = optional(string)
@@ -18,7 +18,8 @@ variable "route_tables" {
       tf_id = string
 
       name_config = object({
-        values = map(string)
+        name_segments = map(string)
+        parent_name   = optional(string)
       })
 
       nc_bypass = optional(string)

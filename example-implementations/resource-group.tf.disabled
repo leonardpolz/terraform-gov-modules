@@ -4,9 +4,10 @@ module "resource_group" {
   resource_groups = [{
     tf_id = "example"
     name_config = {
-      values = {
+      name_segments = {
+        landing_zone  = "test"
+        environment   = "dev"
         workload_name = "exampleresourcegroup"
-        environment   = "tst"
       }
     }
 
@@ -32,3 +33,8 @@ module "resource_group" {
 output "resource_group_config" {
   value = module.resource_group.resource_group_config_map
 }
+
+output "test" {
+  value = module.resource_group.resource_group_config_map["example"].name
+}
+

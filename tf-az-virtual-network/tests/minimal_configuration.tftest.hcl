@@ -11,7 +11,7 @@ run "plan" {
         tf_id = "test_vnet"
 
         name_config = {
-          values = {
+          name_segments = {
             environment   = "tst"
             workload_name = "test-vnet"
           }

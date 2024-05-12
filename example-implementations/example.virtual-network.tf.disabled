@@ -7,13 +7,12 @@ module "virtual_network" {
       tf_id = "test_vnet"
 
       name_config = {
-        values = {
-          environment   = "tst"
+        name_segments = {
+          landing_zone  = "lz"
+          environment   = "dev"
           workload_name = "test-vnet"
         }
       }
-
-      nc_bypass = "test-vnet"
 
       tags = {
         terraform_repository_uri = "https://github.com/leonardpolz/terraform-governance-framework-core-modules.git"
@@ -41,7 +40,7 @@ module "virtual_network" {
         tf_id = "default"
 
         name_config = {
-          values = {
+          name_segments = {
             workload_name = "default"
           }
         }
@@ -50,9 +49,10 @@ module "virtual_network" {
 
         delegations = [{
           name_config = {
-            values = {
-              workload_name = "default"
+            name_segments = {
             }
+
+            parent_name = "sqlmi-mock"
           }
 
           service_delegation = {
@@ -64,7 +64,7 @@ module "virtual_network" {
         network_security_group_settings = {
 
           name_config = {
-            values = {}
+            name_segments = {}
           }
 
           nc_bypass = "test-nsg"
@@ -74,7 +74,7 @@ module "virtual_network" {
               tf_id = "test_nsg_rule"
 
               name_config = {
-                values = {
+                name_segments = {
                   workload_name = "test-nsg-rule"
                 }
               }
@@ -99,9 +99,9 @@ module "virtual_network" {
         tf_id = "test_vnet_peering"
 
         name_config = {
-          values = {
-            workload_name = "test-vnet-peering"
-          }
+          name_segments = {}
+
+          parent_name = "hub-vnet"
         }
 
         remote_virtual_network_id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-mock-group/providers/Microsoft.Network/virtualNetworks/vnet-mock-network"
@@ -110,6 +110,6 @@ module "virtual_network" {
   ]
 }
 
-output "virtual_network_config" {
-  value = module.virtual_network.virtual_network_config_map
-}
+# output "virtual_network_config" {
+#   value = module.virtual_network.virtual_network_config_map
+# }

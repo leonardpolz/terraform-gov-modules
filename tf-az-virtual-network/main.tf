@@ -1,5 +1,5 @@
 module "configuration_interceptor" {
-  source = "../tf-governance-interceptor-facade"
+  source = "../tf-governance-interceptor"
   configurations = [for vnet in var.virtual_networks : {
     tf_id                = vnet.tf_id
     resource_type        = "Microsoft.Network/virtualNetworks"
@@ -25,7 +25,24 @@ locals {
                   tags = module.configuration_interceptor.configuration_map[vnet.tf_id].subnets[snet.tf_id].network_security_group_settings.tags
                 }
               )
-          })
+
+              delegations = [
+                for index, del in snet.delegations != null ? snet.delegations : [] : merge(
+                  del, {
+                    name = module.configuration_interceptor.configuration_map[vnet.tf_id].subnets[snet.tf_id].delegations[index].name
+                  }
+                )
+              ]
+            }
+          )
+        ]
+
+        virtual_network_peerings = [
+          for vnetp in vnet.virtual_network_peerings != null ? vnet.virtual_network_peerings : [] : merge(
+            vnetp, {
+              name = module.configuration_interceptor.configuration_map[vnet.tf_id].virtual_network_peerings[vnetp.tf_id].name
+            }
+          )
         ]
       }
     )
@@ -34,7 +51,7 @@ locals {
 
 resource "azurerm_virtual_network" "virtual_networks" {
   for_each                = local.virtual_network_map
-  name                    = each.value.nc_bypass != null ? each.value.nc_bypass : each.value.name
+  name                    = each.value.name
   resource_group_name     = each.value.resource_group_name
   address_space           = each.value.address_space
   location                = each.value.location
@@ -93,7 +110,7 @@ resource "azurerm_subnet" "subnets" {
   dynamic "delegation" {
     for_each = each.value.delegations != null ? each.value.delegations : []
     content {
-      name = delegation.value.nc_bypass != null ? delegation.value.nc_bypass : delegation.value.name
+      name = delegation.value.name
 
       dynamic "service_delegation" {
         for_each = delegation.value.service_delegation != null ? [delegation.value.service_delegation] : []
@@ -112,10 +129,10 @@ module "network_security_groups" {
     for key, snet in local.subnet_map : merge(
       snet.network_security_group_settings,
       {
-        tf_id       = key
-        parent_name = azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].name
-        name_config = try(snet.network_security_group_settings.name_config, null) != null ? snet.network_security_group_settings.name_config : {
-          values = {}
+        tf_id = key
+        name_config = {
+          name_segments = try(snet.network_security_group_settings.name_config.name_segments, null) != null ? snet.network_security_group_settings.name_config.name_segments : {}
+          parent_name   = azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].name
         }
 
         resource_group_name = try(snet.network_security_group_settings.resource_group_name, null) != null ? snet.network_security_group_settings.resource_group_name : azurerm_virtual_network.virtual_networks[snet.vnet_tf_id].resource_group_name

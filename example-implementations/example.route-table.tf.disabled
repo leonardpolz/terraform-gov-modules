@@ -5,7 +5,8 @@ module "route_table" {
     tf_id = "example_route_table"
 
     name_config = {
-      values = {
+      name_segments = {
+        landing_zone  = "lz1"
         workload_name = "example"
         environment   = "tst"
       }
@@ -34,10 +35,8 @@ module "route_table" {
       tf_id = "example_route"
 
       name_config = {
-        values = {
-          workload_name = "example"
-          environment   = "tst"
-        }
+        name_segments = {}
+        parent_name   = "firewall"
       }
 
       address_prefix         = "0.0.0.0"
@@ -48,5 +47,5 @@ module "route_table" {
 }
 
 output "route_table_config" {
-    value = module.route_table.route_table_config_map
+  value = module.route_table.route_table_config_map
 }

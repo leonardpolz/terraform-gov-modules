@@ -9,7 +9,7 @@ variables {
       parent_name = "test-parent"
 
       name_config = {
-        values = {
+        name_segments = {
           workload_name = "example"
           environment   = "tst"
         }
@@ -43,7 +43,7 @@ variables {
           tf_id = "test_route"
 
           name_config = {
-            values = {
+            name_segments = {
               workload_name = "example"
             }
           }
@@ -58,7 +58,7 @@ variables {
           tf_id = "test_route_2"
 
           name_config = {
-            values = {
+            name_segments = {
               workload_name = "example"
             }
           }
@@ -76,7 +76,7 @@ variables {
       parent_name = "test-parent"
 
       name_config = {
-        values = {
+        name_segments = {
           workload_name = "example"
           environment   = "tst"
         }
@@ -110,7 +110,7 @@ variables {
           tf_id = "test_route"
 
           name_config = {
-            values = {
+            name_segments = {
               workload_name = "example"
             }
           }
@@ -125,7 +125,7 @@ variables {
           tf_id = "test_route_2"
 
           name_config = {
-            values = {
+            name_segments = {
               workload_name = "example"
             }
           }
